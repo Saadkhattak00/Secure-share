@@ -47,9 +47,9 @@ class AuthService {
 
   Future singOut(context) async {
     try {
-      await storage.delete(key: 'email');
-      await storage.delete(key: 'password');
-      await storage.delete(key: 'usingbiometric');
+      // await storage.delete(key: 'email');
+      // await storage.delete(key: 'password');
+      // await storage.delete(key: 'usingbiometric');
       await _firebaseAuth.signOut();
       Navigator.pushNamedAndRemoveUntil(
           context, LoginScreen.routeName, (route) => false);

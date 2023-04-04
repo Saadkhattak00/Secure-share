@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secureshare/models/fileModel.dart';
 
 class DatabaseService {
   final String uid;
@@ -21,19 +22,51 @@ class DatabaseService {
     );
   }
 
+// getting user data.
   Stream gettinguserData() {
     return userCollection.doc(uid).snapshots();
   }
 
-  Stream gettingmyupload() {
-    return userCollection.doc(uid).collection('uploads').doc(uid).snapshots();
+// saving user file to database
+  Future savingFile(String fileUrl, String filename) async {
+    var filemodel = FileModel(
+      filename: filename,
+      url: fileUrl,
+      dateTime: DateTime.now(),
+    );
+    return await userCollection.doc(uid).collection('uploads').doc().set(
+          filemodel.toMap(),
+        );
   }
 
-  Future savingFile(String fileUrl, String filename) async {
-    return await userCollection.doc(uid).collection('uploads').doc(uid).set({
-      'fileurl': fileUrl,
-      'name': filename,
-      'time': DateTime.now(),
+  // getting file data (details)
+  Stream gettingfile() {
+    return userCollection.doc(uid).collection('uploads').snapshots();
+  }
+
+// deleting file
+  Future deleteFile(String id) async {
+    var ref = await userCollection.doc(uid).collection('uploads').doc(id);
+    return ref
+        .delete()
+        .then((value) => print("File deleted"))
+        .catchError((err) {
+      print("Failed to delete user $err");
     });
+  }
+
+  // updating file name
+  Future updateName(String id, String name) async {
+    return userCollection
+        .doc(uid)
+        .collection('uploads')
+        .doc(id)
+        .update({
+          'filename': name,
+        })
+        .then((value) => print("Updated name"))
+        .catchError((err) {
+          print("Error");
+        });
   }
 }

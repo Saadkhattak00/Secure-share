@@ -36,7 +36,8 @@ class Navbar extends StatelessWidget {
                 children: [
                   UserAccountsDrawerHeader(
                     accountName: Text(
-                      snapshot.data!['name'],
+                      'Aziz khan',
+                      //snapshot.data!['name'] ?? '',
                       style: GoogleFonts.poppins(
                         textStyle: const TextStyle(
                           fontSize: 18,
@@ -45,7 +46,8 @@ class Navbar extends StatelessWidget {
                       ),
                     ),
                     accountEmail: Text(
-                      snapshot.data!['email'],
+                      'axixkhanii46@gmail.com',
+                      //snapshot.data!['email'] ?? '',
                       style: GoogleFonts.poppins(
                         textStyle: const TextStyle(
                           fontSize: 14,

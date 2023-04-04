@@ -9,12 +9,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:secureshare/helper/common.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
-import 'package:secureshare/screens/all_file.dart';
-import 'package:secureshare/screens/myupload.dart';
-import 'package:secureshare/screens/received.dart';
+import 'package:secureshare/screens/file/all_file.dart';
+import 'package:secureshare/screens/file/myupload.dart';
+import 'package:secureshare/screens/file/received.dart';
 import 'package:secureshare/services/database_service.dart';
 import 'package:secureshare/widget/navbar.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../constant.dart';
 import '../services/auth_services.dart';
@@ -41,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<String> _iconname = [
     'All',
-    'Myupload',
+    'Upload',
     'Received',
   ];
   final List screen = [
@@ -139,15 +141,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: height * 0.12,
+                          height: height * 0.13,
                           child: Image.asset(_icons[index]),
                         ),
                         Text(
                           _iconname[index],
+                          textAlign: TextAlign.justify,
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
                               fontSize: 20,
@@ -176,123 +180,121 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: _isloading
-                ? Scaffold(
-                    body: Center(
-                      child: SpinKitCircle(
-                        color: Theme.of(context).primaryColor,
-                        size: 50,
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            height: 220,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Select Image From!',
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )
-                : Container(
-                    height: 220,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Select Image From!',
-                            style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          PickFile();
+                        },
+                        child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(children: [
+                              Image.asset(
+                                'assets/gallery.png',
+                                height: 60,
+                                width: 60,
                               ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  await pickGallery();
-                                },
-                                child: Card(
-                                  elevation: 5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(children: [
-                                      Image.asset(
-                                        'assets/gallery.png',
-                                        height: 60,
-                                        width: 60,
-                                      ),
-                                      Text(
-                                        'Gallery',
-                                        style: GoogleFonts.poppins(
-                                          textStyle: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await pickCamera();
-                                },
-                                child: Card(
-                                  elevation: 5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(children: [
-                                      Image.asset(
-                                        'assets/camera.png',
-                                        height: 60,
-                                        width: 60,
-                                      ),
-                                      Text(
-                                        'Camera',
-                                        style: GoogleFonts.poppins(
-                                          textStyle: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 18.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (pickedImage == null)
-                                  showSnakBar(context, Colors.red,
-                                      "please select Image");
-                                addFile();
-                              },
-                              child: Text(
-                                "Upload",
+                              Text(
+                                'Gallery',
                                 style: GoogleFonts.poppins(
                                   textStyle: const TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
-                            ),
+                            ]),
                           ),
-                        ],
+                        ),
                       ),
+                      GestureDetector(
+                        onTap: () async {
+                          await pickCamera();
+                        },
+                        child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(children: [
+                              Image.asset(
+                                'assets/camera.png',
+                                height: 60,
+                                width: 60,
+                              ),
+                              Text(
+                                'Camera',
+                                style: GoogleFonts.poppins(
+                                  textStyle: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 18.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (pickedImage == null) {
+                          showSnakBar(
+                              context, Colors.red, "please select Image");
+                        }
+
+                        addFile();
+                      },
+                      child: _isloading
+                          ? Center(
+                              child: SpinKitCircle(
+                                color: Theme.of(context).primaryColor,
+                                size: 50,
+                              ),
+                            )
+                          : Text(
+                              "Upload",
+                              style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
-          );
-        });
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -309,6 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         pickedImage = image;
       });
+      addFile();
     } catch (e) {
       showSnakBar(
         context,
@@ -319,60 +322,63 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //picked image from gallery
-  Future<void> pickGallery() async {
-    try {
-      var image =
-          await picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
-      setState(() {
-        pickedImage = image;
-      });
-    } catch (e) {
-      showSnakBar(
-        context,
-        Colors.red,
-        e.toString(),
-      );
-    }
+  // Future<void> pickGallery() async {
+  //   try {
+  //     var image =
+  //         await picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
+  //     setState(() {
+  //       pickedImage = image;
+  //     });
+  //   } catch (e) {
+  //     showSnakBar(
+  //       context,
+  //       Colors.red,
+  //       e.toString(),
+  //     );
+  //   }
+  // }
+
+  Reference fs = FirebaseStorage.instance.ref();
+  final id = FirebaseAuth.instance.currentUser!.uid;
+
+  // file picker flutter
+  void PickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'docx', 'png'],
+    );
+    if (result == null) return null;
+    PlatformFile file = result.files.first;
+
+    var ref = fs.child('file').child(id).child(file.name);
+
+    UploadTask uploadTask = ref.putFile(File(result.files.single.path!));
+    TaskSnapshot snapshot = await uploadTask;
+
+    String url = await snapshot.ref.getDownloadURL();
+
+    await DatabaseService(uid: id).savingFile(url, file.name);
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
   }
 
-  FirebaseStorage fs = FirebaseStorage.instance;
-
   Future<void> addFile() async {
-    setState(() {
-      _isloading = true;
-    });
     final String fileName = path.basename(pickedImage!.path);
     File imageFile = File(pickedImage!.path);
-    final id = FirebaseAuth.instance.currentUser!.uid;
 
     try {
-      await fs
-          .ref()
-          .child('file')
-          .child(id)
-          .child(fileName)
-          .putFile(imageFile)
-          .then(
+      await fs.child('file').child(id).child(fileName).putFile(imageFile).then(
             (_) => print("Image Added"),
           );
 
-      final url = await fs
-          .ref()
-          .child('file')
-          .child(id)
-          .child(fileName)
-          .getDownloadURL();
+      final url =
+          await fs.child('file').child(id).child(fileName).getDownloadURL();
 
-      await DatabaseService(uid: id)
-          .savingFile(url, pickedImage!.name)
-          .whenComplete(() {
-        setState(() {
-          _isloading = false;
-        });
-      });
+      await DatabaseService(uid: id).savingFile(url, pickedImage!.name);
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
       // ignore: use_build_context_synchronously
-      showSnakBar(context, Colors.green, "File Added");
+      showSnakBar(context, Colors.green, "Image Added");
     } on FirebaseException catch (e) {
       showSnakBar(context, Colors.red, e.message);
     }

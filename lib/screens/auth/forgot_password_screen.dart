@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:secureshare/helper/common.dart';
 
-import '../constant.dart';
-import '../widget/custom_textfield.dart';
-import '../helper/extension.dart';
-import '../widget/custom_button.dart';
-import '../screens/auth/login_screen.dart';
-import '../services/auth_services.dart';
+import '../../constant.dart';
+import '../../widget/custom_textfield.dart';
+import '../../helper/extension.dart';
+import '../../widget/custom_button.dart';
+import 'login_screen.dart';
+import '../../services/auth_services.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static const String routeName = 'forgotpassword';

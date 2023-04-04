@@ -3,8 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:secureshare/screens/auth/login_screen.dart';
 
-import '../constant.dart';
-import '../wraper.dart';
+import '../../constant.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override

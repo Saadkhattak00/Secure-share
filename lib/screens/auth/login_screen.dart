@@ -16,7 +16,7 @@ import '../../screens/home_screen.dart';
 import '../../helper/extension.dart';
 import '../../services/auth_services.dart';
 import '../../helper/common.dart';
-import '../forgot_password_screen.dart';
+import 'forgot_password_screen.dart';
 import '../../constant.dart';
 
 class LoginScreen extends StatefulWidget {
